@@ -1,0 +1,256 @@
+package me.ausaf.fbla.app.controller;
+
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTimePicker;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.print.PrinterJob;
+import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import me.ausaf.fbla.app.Customer;
+import me.ausaf.fbla.app.SQLiteManager;
+import me.ausaf.fbla.app.ui.AlertMessage;
+
+/**
+ * Contains logic/behaviors of Attendance class of 2017. Enables the user 
+ * to modify a real-time check-in table and generate/print weekly attendance reports.
+ *  
+ *  The layout for this view can be found at 'res/AttendanceView.fxml'
+ *  
+ * @author Ausaf Ahmedsss
+ */
+public class AttendanceController implements Initializable {
+	
+	 //gui components
+	 @FXML private JFXTextField fname, lname; 
+	 @FXML private JFXTimePicker time;
+	 @FXML private JFXComboBox<String> day, week;
+     @FXML private JFXButton clear, submit, report, newWeek;
+     @FXML private TableView<Customer> sundayTable, mondayTable, tuesdayTable, wednesdayTable, thursdayTable, fridayTable, saturdayTable;
+     @FXML private Label sundayTotal, mondayTotal, tuesdayTotal, wednesdayTotal, thursdayTotal, fridayTotal, saturdayTotal;
+     
+     //drop down lists
+     private ObservableList<String> days, weeks;
+     
+     //Collections of components ordered by day so we can loop through quickly
+     private ArrayList<TableView<Customer>> tables = new ArrayList<>();
+     private ArrayList<Label> totals = new ArrayList<>(); //hold number above each column
+	
+     @Override
+	public void initialize(URL location, ResourceBundle resources) {
+		days = FXCollections.observableArrayList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");		
+		weeks = FXCollections.observableArrayList();
+		
+		//fill week selector
+		for(int i = 1; i <= getWeekCount(); i++)
+			weeks.add("Week " + i);
+		
+		//add reference arrays
+		totals.add(sundayTotal);
+		totals.add(mondayTotal);
+		totals.add(tuesdayTotal);
+		totals.add(wednesdayTotal);
+		totals.add(thursdayTotal);
+		totals.add(fridayTotal);
+		totals.add(saturdayTotal);
+		
+		tables.add(sundayTable);
+		tables.add(mondayTable);
+		tables.add(tuesdayTable);
+		tables.add(wednesdayTable);
+		tables.add(thursdayTable);
+		tables.add(fridayTable);
+		tables.add(saturdayTable);
+		
+		//add columns to tables
+		for(TableView<Customer> table: tables){
+			TableColumn<Customer, String> fname = new TableColumn<Customer, String>("First Name");
+			TableColumn<Customer, String> lname = new TableColumn<Customer, String>("Last Name");
+			TableColumn<Customer, String> time = new TableColumn<Customer, String>("Check-in Time");
+			
+			fname.setCellValueFactory(new PropertyValueFactory<Customer, String>("fname"));
+			lname.setCellValueFactory(new PropertyValueFactory<Customer, String>("lname"));
+			time.setCellValueFactory(new PropertyValueFactory<Customer, String>("time"));
+			
+			table.getColumns().setAll(fname, lname, time);
+			table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		}
+		
+		//add day selection options
+		day.setItems(days);
+		
+		//change data when user selects a different week 
+		week.setItems(weeks);		
+		week.getSelectionModel().select("Week " + getWeekCount());
+		week.setOnAction(event->update());
+		
+		//assign button actions to methods
+		newWeek.setOnAction(event->createNewWeek());
+		submit.setOnAction(event->handleSubmit());
+		clear.setOnAction(event->handleClear());
+		report.setOnAction(event->createReport());
+		update();
+	}
+
+	/**
+	 * Create graph of attendance volume for given week, 
+	 * and enable user to print it. 
+	 */
+	private void createReport() {
+		Stage stage = new Stage();
+		VBox box = new VBox();
+		JFXButton print = new JFXButton("Export / Print");
+		
+		box.setAlignment(Pos.TOP_CENTER);
+		box.setSpacing(15);
+		stage.setTitle("Attendance report");
+		stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("img/icon.png")));
+
+		NumberAxis x = new NumberAxis();
+        NumberAxis y = new NumberAxis();
+        x.setTickUnit(1.0);
+    
+		LineChart<Number, Number> chart = new LineChart<>(x, y);
+		chart.setTitle("Attendance Report");
+
+		XYChart.Series series = new XYChart.Series();
+		
+		for(int i = 0; i < totals.size(); i++){
+			series.getData().add(new XYChart.Data(i+1, Integer.parseInt(totals.get(i).getText())));
+		}
+		
+		print.setOnAction(event->{
+			PrinterJob job = PrinterJob.createPrinterJob();
+			if(job.showPrintDialog(null)){
+				job.printPage(chart);
+				job.endJob();
+			}
+		});
+
+		box.getChildren().add(chart);
+		box.getChildren().add(print);
+		chart.getData().add(series);
+		stage.setScene(new Scene(box));
+		stage.showAndWait();
+	}
+
+	/**
+	 * Refreshes the data in all tables with databases. This method is called
+	 * after every check-in and week selection.
+	 */
+	private void update(){
+		for(int i = 0; i < tables.size(); i++){
+			String day = ((String)(days.toArray()[i])).toLowerCase();
+			try {
+				tables.get(i).setItems(FXCollections.observableArrayList(SQLiteManager.getAttendance(week.getSelectionModel().getSelectedIndex()+1, day)));
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			System.out.println(totals == null);
+			totals.get(i).setText(tables.get(i).getItems().size()+"");
+		}
+		
+	}
+	
+	
+	/**
+	 * Validated input and creates new entry in corresponding tab for the check-in
+	 */
+	private void handleSubmit() {
+		if(fname.getText().isEmpty() || lname.getText().isEmpty() 
+				|| time.getValue() == null || day.getValue() == null){
+			new AlertMessage("Please complete all fields and try again").showError();
+		}else{
+			String sql = "INSERT INTO attendance(week, day, fname, lname, time) VALUES(?,?,?,?,?)";
+			try {
+				PreparedStatement ps = SQLiteManager.getConnection().prepareStatement(sql);
+				ps.setInt(1, week.getSelectionModel().getSelectedIndex()+1);
+				ps.setString(2, day.getValue().toLowerCase());
+				ps.setString(3, fname.getText()); 
+				ps.setString(4, lname.getText());
+				ps.setString(5, time.getValue().toString());
+				ps.executeUpdate();
+				update(); //refresh
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} 
+			
+			clear.fire();
+		} 
+	}
+
+	/**
+	 * Clear textfields 
+	 */
+	private void handleClear(){
+		fname.clear();
+		lname.clear();
+	}
+
+	//retrieve week count from database
+	private int getWeekCount(){
+		Connection c = SQLiteManager.getConnection();
+		String sql = "SELECT * FROM data WHERE property = 'num_weeks'";
+		ResultSet rs;
+		int n = -1;
+		try {
+			rs = c.createStatement().executeQuery(sql);
+			if(rs.next()) 
+				n = rs.getInt("value");
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return n;
+	}
+	
+	
+	//update week count in database
+	private void setWeekCount(int count){
+		Connection c = SQLiteManager.getConnection();
+		String sql = "INSERT OR REPLACE INTO data(property, value) values('num_weeks'," + count + ")";
+		ResultSet rs;
+		int n = -1;
+		try {
+			c.createStatement().executeUpdate(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Add new attendance week and increment week count in the table
+	 */
+	private void createNewWeek(){
+		int count = getWeekCount() + 1;
+		weeks.add("Week " + count);
+		week.getSelectionModel().select("Week " + count);
+		setWeekCount(count);
+	}
+	
+	
+}

@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTimePicker?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import jfxtras.scene.layout.HBox?>
+
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.ausaf.fbla.app.controller.AttendanceController">
+   <right>
+      <VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="220.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <TitledPane animated="false" collapsible="false" text="Customer Check-in">
+              <content>
+                  <VBox spacing="20.0">
+                     <children>
+                        <JFXTextField fx:id="fname" labelFloat="true" promptText="First Name">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </JFXTextField>
+                        <JFXTextField fx:id="lname" labelFloat="true" promptText="Last Name">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </JFXTextField>
+                        <JFXTimePicker fx:id="time" defaultColor="#4059a9" promptText="Time in " />
+                        <JFXComboBox fx:id="day" labelFloat="true" prefWidth="175.0" promptText="Day" />
+                        <HBox alignment="CENTER" spacing="30.0">
+                           <children>
+                              <JFXButton fx:id="clear" style="-fx-background-color: #dddddd;" text="Clear">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </JFXButton>
+                              <JFXButton fx:id="submit" layoutX="10.0" layoutY="13.0" style="-fx-background-color: #dddddd;" text="Check-in">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+              </content>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </TitledPane>
+            <TitledPane animated="false" collapsible="false" layoutX="30.0" layoutY="10.0" text="Options">
+               <content>
+                  <VBox alignment="TOP_CENTER" spacing="20.0">
+                     <children>
+                        <JFXComboBox fx:id="week" promptText="Select Week">
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </VBox.margin>
+                        </JFXComboBox>
+                        <JFXButton fx:id="newWeek" style="-fx-background-color: #dddddd;" text="New Week">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </VBox>
+               </content>
+            </TitledPane>
+            <TitledPane animated="false" collapsible="false" layoutX="30.0" layoutY="312.0" text="Report">
+               <content>
+                  <VBox alignment="TOP_CENTER" spacing="20.0">
+                     <children>
+                        <JFXButton fx:id="report" style="-fx-background-color: #dddddd;" text="Generate Report">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </VBox>
+               </content>
+            </TitledPane>
+         </children>
+         <padding>
+            <Insets left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </right>
+   <center>
+      <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+         <tabs>
+            <Tab text="Sunday">
+               <content>
+                  <VBox>
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Label text="Total Customers: ">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sundayTotal" text="0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                        <TableView fx:id="sundayTable" prefHeight="500.0" prefWidth="600.0">
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab style="-fx-text-fill: #000000;" text="Monday">
+               <content>
+                  <VBox>
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Label text="Total Customers: ">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="mondayTotal" text="0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                        <TableView fx:id="mondayTable" prefHeight="500.0" prefWidth="600.0">
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab style="-fx-text-fill: #000000;" text="Tuesday">
+               <content>
+                  <VBox>
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Label text="Total Customers: ">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="tuesdayTotal" text="0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                        <TableView fx:id="tuesdayTable" prefHeight="500.0" prefWidth="600.0">
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab style="-fx-text-fill: #000000;" text="Wednesday">
+               <content>
+                  <VBox>
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Label text="Total Customers: ">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="wednesdayTotal" text="0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                        <TableView fx:id="wednesdayTable" prefHeight="500.0" prefWidth="600.0">
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab style="-fx-text-fill: #000000;" text="Thursday">
+               <content>
+                  <VBox>
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Label text="Total Customers: ">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="thursdayTotal" text="0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                        <TableView fx:id="thursdayTable" prefHeight="500.0" prefWidth="600.0">
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab style="-fx-text-fill: #000000;" text="Friday">
+               <content>
+                  <VBox>
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Label text="Total Customers: ">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="fridayTotal" text="0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                        <TableView fx:id="fridayTable" prefHeight="500.0" prefWidth="600.0">
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab style="-fx-text-fill: #000000;" text="Saturday">
+               <content>
+                  <VBox>
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Label text="Total Customers: ">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="saturdayTotal" text="0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                        <TableView fx:id="saturdayTable" prefHeight="500.0" prefWidth="600.0">
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </center>
+</BorderPane>

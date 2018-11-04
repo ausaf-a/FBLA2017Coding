@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="res"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/ausaf/Desktop/Programs/javalibs/jfoenix.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ausaf/Desktop/Programs/javalibs/sqlite-jdbc-3.16.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ausaf/Desktop/Programs/javalibs/jfxtras-labs-samples-8.0-r6-SNAPSHOT-all.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ausaf/Desktop/Programs/javalibs/kryo-shaded-4.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ausaf/Desktop/Programs/javalibs/objenesis-2.5.1/objenesis-2.5.1.jar" sourcepath="C:/Users/ausaf/Desktop/Programs/javalibs/objenesis-2.5.1/objenesis-2.5.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Users/ausaf/Desktop/Programs/javalibs/objenesis-2.5.1/objenesis-2.5.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/ausaf/Desktop/Programs/javalibs/minlog-1.2/minlog-1.2.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

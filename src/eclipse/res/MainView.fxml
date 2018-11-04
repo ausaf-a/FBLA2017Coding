@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="220.0" minWidth="800.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.ausaf.fbla.app.controller.MainViewController">
+   <left>
+      <VBox prefWidth="150.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
+         <children>
+            <JFXButton fx:id="employeesButton" prefHeight="44.0" prefWidth="157.0" text="Employees">
+               <graphic>
+                  <ImageView fitHeight="33.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/employee_icon2.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets left="-20.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton fx:id="attendanceButton" layoutX="10.0" layoutY="54.0" prefHeight="44.0" prefWidth="157.0" text=" Attendance">
+               <graphic>
+                  <ImageView fitHeight="33.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/attendance_icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets left="-10.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton fx:id="helpButton" layoutX="10.0" layoutY="98.0" prefHeight="44.0" prefWidth="157.0" text=" Help">
+               <graphic>
+                  <ImageView fitHeight="26.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/help.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets left="-50.0" />
+               </padding>
+            </JFXButton>
+         </children>
+      </VBox>
+   </left>
+</BorderPane>
